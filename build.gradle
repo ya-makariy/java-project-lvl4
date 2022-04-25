@@ -20,6 +20,18 @@ repositories {
 dependencies {
     implementation 'io.javalin:javalin:4.4.0'
     testImplementation 'org.slf4j:slf4j-simple:1.7.36'
+
+    testImplementation 'com.h2database:h2:2.1.212'
+    implementation 'io.ebean:ebean:13.4.0'
+    implementation 'io.ebean:ebean-querybean:13.4.0'
+    implementation 'io.ebean:ebean-annotation:8.0'
+    implementation 'io.ebean:ebean-ddl-generator:13.3.0'
+    implementation 'io.ebean:ebean-migration:13.0.0'
+    testImplementation 'io.ebean:querybean-generator:13.4.0'
+
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.5'
+    implementation 'javax.activation:activation:1.1.1'
+
 }
 
 group = 'hexlet.code'
@@ -36,6 +48,11 @@ tasks.withType(JavaCompile) {
 
 task stage(dependsOn: ['clean', 'installDist']) {
     installDist.mustRunAfter clean
+}
+
+task generateMigrations(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'hexlet.code.MigrationGenerator'
 }
 
 

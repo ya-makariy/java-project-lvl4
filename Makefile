@@ -25,3 +25,7 @@ build:
 .PHONY: test
 test:
 	./gradlew clean test
+
+.PHONY: generate-migrations
+generate-migrations:
+	gradle generateMigrations

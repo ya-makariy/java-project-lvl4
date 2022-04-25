@@ -1,0 +1,15 @@
+datasource:
+  default: ${ENV_TYPE}
+  development:
+    username: ""
+    password: ""
+    url: "jdbc:h2:./app"
+  production:
+    username: ${PG_USERNAME}
+    password: ${PG_PASSWORD}
+    url: jdbc:postgresql://${PG_HOST}:${PG_PORT}/${PG_DBNAME}
+
+ebean:
+  migration:
+    run: true
+    generate: true
