@@ -30,6 +30,15 @@ compileJava {
     options.release = 17
 }
 
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+task stage(dependsOn: ['clean', 'installDist']) {
+    installDist.mustRunAfter clean
+}
+
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
@@ -40,6 +49,7 @@ jacoco {
     toolVersion = "0.8.7"
     reportsDir = file("$buildDir/jacoco")
 }
+
 
 test {
     useJUnitPlatform()
