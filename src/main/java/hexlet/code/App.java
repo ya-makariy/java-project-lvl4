@@ -1,7 +1,15 @@
 package hexlet.code;
 
 import io.javalin.Javalin;
-import io.javalin.core.JavalinConfig;
+import io.javalin.plugin.rendering.template.JavalinThymeleaf;
+
+
+import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+
+import hexlet.code.controllers.RootController;
 
 public class App {
     private static final String DEV = "development";
@@ -12,28 +20,41 @@ public class App {
     }
 
     private static void addRoutes(Javalin app) {
-        app.get("/", ctx -> ctx.result("Hello"));
+        app.get("/", RootController.welcome);
     }
 
     public static boolean isDevEnv() {
         return System.getenv()
                 .getOrDefault("ENV_TYPE", DEV)
                 .equals(DEV);
+
+    }
+    private static TemplateEngine getTemplateEngine() {
+        TemplateEngine templateEngine = new TemplateEngine();
+        templateEngine.addDialect(new LayoutDialect());
+        templateEngine.addDialect(new Java8TimeDialect());
+        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setPrefix("/templates/");
+        templateEngine.addTemplateResolver(templateResolver);
+        return templateEngine;
     }
 
-    public static Javalin getApp() {
+
+        public static Javalin getApp() {
         Javalin app = Javalin.create(config -> {
             if (isDevEnv()) {
                 config.enableDevLogging();
             }
-                //config.enableWebjars();
+            JavalinThymeleaf.configure(getTemplateEngine());
+            config.enableWebjars();
         });
+
+        addRoutes(app);
 
         app.before(ctx -> {
             ctx.attribute("ctx", ctx);
         });
 
-        addRoutes(app);
         return app;
     }
     public static void main(String[] args) {
