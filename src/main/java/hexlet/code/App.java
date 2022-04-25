@@ -26,7 +26,7 @@ public class App {
             if (isDevEnv()) {
                 config.enableDevLogging();
             }
-                config.enableWebjars();
+                //config.enableWebjars();
         });
 
         app.before(ctx -> {
